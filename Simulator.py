@@ -25,6 +25,21 @@ class Simulator:
         :return: New state of the world.
         """
         self.generation += 1
+        for x in range(0,self.world.width):
+            for y in range(0,self.world.height):
+                #sum of 1 and 0's is amount of neighbours.
+                amount_neighbours = sum(self.world.get_neighbours( x, y))
+
+                if amount_neighbours < 2:#underpopulation
+                    self.world.set(x,y,0)
+                elif amount_neighbours == 3:#birth
+                    self.world.set(x,y,1)
+                elif amount_neighbours > 3:#overpopulation
+                    self.world.set(x, y, 0)
+                elif amount_neighbours == 2:
+                    #survives, or stays dead. So skipped. (stil added for clearity)
+                    pass
+
 
         #TODO: Do something to evolve the generation
 

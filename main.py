@@ -6,7 +6,9 @@ import time
 VISUALISATION=True
 
 if __name__ == "__main__":
-    w = World(110)
+    width = 110
+    hight = 110
+    w = World(110,110)
     sim = Simulator(w)
 
     if VISUALISATION:

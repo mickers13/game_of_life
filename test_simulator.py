@@ -80,7 +80,7 @@ class TestSimulator(TestCase):
         # middle in the given set world.
         x, y = 5, 6
         # Create living cells in a half + patern. Middle should survive.
-        world.set(x, y)  # thisone should die.
+        world.set(x, y)  # this one should die.
         world.set(x - 1, y)
         world.set(x + 1, y)
         world.set(x, y - 1)
@@ -104,7 +104,7 @@ class TestSimulator(TestCase):
         # middle in the given set world.
         x, y = 5, 6
         # Create living cells in a half + patern. Middle should survive.
-        world.set(x, y)  # thisone should die.
+        world.set(x, y)  # this one should survive.
         world.set(x - 1, y)
         world.set(x + 1, y)
         world.set(x, y - 1)
