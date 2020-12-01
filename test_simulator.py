@@ -15,6 +15,8 @@ class TestSimulator(TestCase):
         """
         self.assertIsInstance(self.sim.update(), World)
 
+
+
     def test_get_generation(self):
         """
         Tests whether get_generation returns the correct value:
@@ -44,3 +46,24 @@ class TestSimulator(TestCase):
         self.sim.set_world(world)
         self.assertIsInstance(self.sim.get_world(), World)
         self.assertIs(self.sim.get_world(), world)
+
+    def test_ruleset(self):
+        """
+        Test for checking if the next generation after the initial state has the desired result for the following rules:
+
+        - Elke levende cel met minder dan twee levende buren gaat dood (ook wel onderpopulatie of exposure genaamd);
+        - Elke levende cel met meer dan drie levende buren gaat dood (ook wel overpopulatie of overcrowding genaamd);
+        - Elke cel met twee of drie levende buren overleeft, onveranderd naar de volgende generatie (survival);
+        - Elke dode cel met precies drie levende buren komt tot leven (ook wel geboorte of birth genaamd).
+
+        """
+        #Test case: niet gegoeg buren gaat dood door under populatie.
+        world = World(10)
+        self.sim.set_world(world)
+        world.width, world.height = 10, 12
+        world = World(world.width, world.height)
+        #middle in the given set world.
+        x, y = 5, 6
+        world.set(x, y)
+        self.sim.update()
+        self.assertEqual(world.get(x, y),0)

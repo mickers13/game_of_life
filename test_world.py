@@ -43,3 +43,5 @@ class TestWorld(TestCase):
         neighbours = self.world.get_neighbours(x, y)
         self.assertEqual(8, len(neighbours))
         self.assertIn(value, neighbours)
+
+
