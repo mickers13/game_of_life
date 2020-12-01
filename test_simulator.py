@@ -47,14 +47,11 @@ class TestSimulator(TestCase):
         self.assertIsInstance(self.sim.get_world(), World)
         self.assertIs(self.sim.get_world(), world)
 
-    def test_ruleset(self):
+    def test_rule_under_population(self):
         """
-        Test for checking if the next generation after the initial state has the desired result for the following rules:
+        Test for checking if the next generation after the initial state has the desired result for the following rule:
 
         - Elke levende cel met minder dan twee levende buren gaat dood (ook wel onderpopulatie of exposure genaamd);
-        - Elke levende cel met meer dan drie levende buren gaat dood (ook wel overpopulatie of overcrowding genaamd);
-        - Elke cel met twee of drie levende buren overleeft, onveranderd naar de volgende generatie (survival);
-        - Elke dode cel met precies drie levende buren komt tot leven (ook wel geboorte of birth genaamd).
 
         """
         #Test case: niet gegoeg buren gaat dood door under populatie.
@@ -64,6 +61,73 @@ class TestSimulator(TestCase):
         world = World(world.width, world.height)
         #middle in the given set world.
         x, y = 5, 6
+        #Create one living cell, should die.
         world.set(x, y)
         self.sim.update()
         self.assertEqual(world.get(x, y),0)
+
+    def test_rule_over_population(self):
+        """
+        Test for checking if the next generation after the initial state has the desired result for the following rule:
+        - Elke levende cel met meer dan drie levende buren gaat dood (ook wel overpopulatie of overcrowding genaamd);
+        - Elke cel met twee of drie levende buren overleeft, onveranderd naar de volgende generatie (survival);
+        - Elke dode cel met precies drie levende buren komt tot leven (ook wel geboorte of birth genaamd).
+        """
+        world = World(10)
+        self.sim.set_world(world)
+        world.width, world.height = 10, 12
+        world = World(world.width, world.height)
+        # middle in the given set world.
+        x, y = 5, 6
+        # Create living cells in a half + patern. Middle should survive.
+        world.set(x, y)  # thisone should die.
+        world.set(x - 1, y)
+        world.set(x + 1, y)
+        world.set(x, y - 1)
+        world.set(x, y + 1)
+        self.sim.update()
+        self.assertEqual(world.get(x, y), 0)
+
+    def test_rule_survival(self):
+        """
+        Test for checking if the next generation after the initial state has the desired result for the following rule:
+
+        - Elke cel met twee of drie levende buren overleeft, onveranderd naar de volgende generatie (survival);
+
+        Test should be basic green, but if code is wrong should be red.
+        """
+        # Test case: Levende cel gaat dood door overpopulatie.
+        world = World(10)
+        self.sim.set_world(world)
+        world.width, world.height = 10, 12
+        world = World(world.width, world.height)
+        # middle in the given set world.
+        x, y = 5, 6
+        # Create living cells in a half + patern. Middle should survive.
+        world.set(x, y)  # thisone should die.
+        world.set(x - 1, y)
+        world.set(x + 1, y)
+        world.set(x, y - 1)
+        self.sim.update()
+        self.assertNotEqual(world.get(x, y), 0)
+
+    def test_rule_birth(self):
+        """
+        Test for checking if the next generation after the initial state has the desired result for the following rule:
+
+        - Elke dode cel met precies drie levende buren komt tot leven (ook wel geboorte of birth genaamd).
+        """
+        # Test case: Levende cel gaat dood door overpopulatie.
+        world = World(10)
+        self.sim.set_world(world)
+        world.width, world.height = 10, 12
+        world = World(world.width, world.height)
+        # middle in the given set world.
+        x, y = 5, 6
+        # Create living cells in a half + patern. Middle should survive.
+        world.set(x, y,0)  # thisone should come to life.
+        world.set(x - 1, y)
+        world.set(x + 1, y)
+        world.set(x, y - 1)
+        self.sim.update()
+        self.assertEqual(world.get(x, y), 1)
